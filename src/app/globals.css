@@ -32,7 +32,9 @@ nav{display:flex;gap:26px;font-size:13px}
 nav a{color:var(--muted);transition:color .2s}
 nav a:hover{color:var(--ink)}
 .header-controls{display:flex;align-items:center;gap:10px}
-.header-controls button{border:1px solid var(--line);background:none;height:32px;min-width:32px;padding:0 8px;font:500 11px var(--mono);border-radius:6px}
+.header-menu{display:contents}
+.mobile-actions{display:none}
+.header-controls button,.mobile-actions button{border:1px solid var(--line);background:none;height:32px;min-width:32px;padding:0 8px;font:500 11px var(--mono);border-radius:6px}
 .lang-button{display:inline-flex;gap:2px;padding:0 3px!important;align-items:center}
 .lang-button span{padding:1px 6px;border-radius:4px;color:var(--muted)}
 .lang-button span[data-on="true"]{background:var(--ink);color:var(--paper)}
@@ -344,33 +346,177 @@ kbd{font:10px var(--mono);opacity:.65}
  .profile-facts dt{margin:0}
 }
 @media(max-width:640px){
- body{font-size:14px}
- .exp{grid-template-columns:1fr;gap:8px}
- .exp-meta{display:flex;flex-wrap:wrap;gap:4px 14px}
- .case-grid,.repo-grid,.now-grid,.contact-inner{grid-template-columns:1fr}
- .demo-question,.demo-stage,.demo-nav,.demo-note{padding-inline:16px}
- .stepper{padding-inline:4px}
- .stepper strong{font-size:11px}
- .stepper small{display:none}
- .io{grid-template-columns:1fr;gap:6px}
- .io-arrow{grid-auto-flow:column;gap:8px;transform:none}
- .io-arrow{font-size:0}
- .io-arrow::after{content:'↓';font-size:20px}
- .factors{grid-template-columns:1fr}
- .skill-groups{grid-template-columns:1fr}
- .lang-tabs button{flex-direction:column;align-items:center;text-align:center;gap:6px;padding:12px 6px}
- .lang-tabs small{font-size:10px}
- .lang-panel{grid-template-columns:1fr;padding:16px}
- .scores{gap:8px}
- .school-row{grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:start}
- .school-logo{width:72px;height:64px;padding:6px}
- .timeline li{grid-template-columns:64px 12px minmax(0,1fr);gap:10px}
- .timeline time{font-size:12px}
- .timeline p{font-size:14px}
- .live-status{margin-left:0;width:100%}
+ /* base: larger text, tighter leading and less empty space than desktop */
+ :root{--gutter:clamp(16px,5vw,20px)}
+ html{scroll-padding-top:76px}
+ body{font-size:15px;line-height:1.8}
+ p{text-wrap:pretty}
+ input,textarea,.run-inputs input,.command-top input{font-size:16px} /* below 16px iOS zooms in on focus */
+ .eyebrow,.section-number{font-size:12px;letter-spacing:.05em;margin-bottom:8px}
+ .quiet{font-size:13px}
+ .logo{display:inline-flex;align-items:center;min-height:44px}
+ .text-link{min-height:44px}
+
+ /* header: one sticky row, everything else behind the menu button */
+ .site-header{position:sticky;top:0;z-index:50;flex-wrap:nowrap;gap:12px;margin-inline:0;min-height:60px;padding:8px var(--gutter);background:var(--paper)}
+ .mobile-actions{display:flex;align-items:center;gap:8px}
+ .mobile-actions button{height:44px}
+ .menu-button{display:inline-grid;place-items:center;width:44px;padding:0!important}
+ .header-menu{display:none;position:absolute;top:100%;left:0;right:0;max-height:calc(100dvh - 60px);overflow-y:auto;padding:4px var(--gutter) 12px;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 16px 28px -18px #0006}
+ .header-menu[data-open="true"]{display:block}
+ .site-header nav{flex-direction:column;gap:0;overflow:visible;padding:0;font-size:16px}
+ .site-header nav a{display:flex;align-items:center;min-height:48px;color:var(--ink);border-bottom:1px solid var(--line)}
+ .header-controls{gap:8px;padding-top:12px}
+ .header-controls .lang-button{display:none}
+ .header-controls button,.linkedin-link,.github-link{height:44px;min-width:44px;justify-content:center}
+ .header-controls button{font-size:16px}
  .search-button kbd{display:none}
- .code pre{font-size:11px}
- .code-line>i{width:26px;padding-right:8px}
- input,textarea{font-size:16px}
+
+ /* hero: photo first, so the first screen says who this is */
+ .profile-hero{gap:20px;padding-top:16px}
+ .profile-portrait{order:-1;max-width:none}
+ .profile-image{aspect-ratio:3/2}
+ .profile-photo{object-position:center 30%}
+ .profile-intro .eyebrow{letter-spacing:0;text-wrap:balance}
+ .profile-intro h1{font-size:36px;line-height:1.3;margin-bottom:6px}
+ .tagline{font-size:18px;margin-bottom:12px}
+ .introduction{line-height:1.8;margin-bottom:20px}
+ .hero-actions{gap:10px}
+ .button-primary,.button-secondary{flex:1 1 auto;justify-content:center;height:48px;padding:0 16px}
+ .live-status{margin-left:0;width:100%}
+ .profile-facts{margin-top:24px}
+ .profile-facts>div{grid-template-columns:96px minmax(0,1fr);gap:10px}
+ .profile-facts dt{font-size:12px}
+ .profile-strip{margin-top:4px;font-size:12px}
+
+ /* sections */
+ .chapter{padding-block:44px;gap:20px}
+ .chapter h2{font-size:26px}
+ .chapter-sub{font-size:14px}
+ .chapter-lead{margin-top:10px;font-size:14px;line-height:1.8}
+ .contact-section{padding-block:44px}
+ .contact-copy,.project-intro,.exp-body p,.school-detail p,.principles p,.stage-head>p:last-child,.lang-info>p:not(.lang-use),.about-copy>p{font-size:15px;line-height:1.8}
+
+ /* work */
+ .project{padding:24px 0}
+ .project h3{font-size:18px}
+ .project-tags{margin-top:12px}
+ .project-tags button{min-height:36px;padding:4px 12px;font-size:12px}
+ .project details{margin-top:6px}
+ .project summary{display:flex;justify-content:space-between;min-height:44px;font-size:14px}
+ .case-grid{grid-template-columns:1fr;padding-top:4px}
+ .case-grid h4{font-size:15px}
+ .case-grid p{font-size:14px;line-height:1.8}
+
+ /* research demo */
+ .demo-question,.demo-stage,.demo-nav,.demo-note{padding-inline:14px}
+ .demo-question{padding-block:16px}
+ .demo-question span{font-size:12px}
+ .demo-question p{font-size:15px}
+ .stepper{padding-inline:4px;scroll-margin-top:72px}
+ .stepper strong{font-size:12px}
+ .stepper small{display:none}
+ .stage-step,.io-label{font-size:12px}
+ .stage-head h3{font-size:19px}
+ .io{grid-template-columns:minmax(0,1fr);gap:6px}
+ .io-col{padding:12px}
+ .io-arrow{display:flex;align-items:center;justify-content:center;gap:8px;font-size:0}
+ .io-arrow span{font-size:12px}
+ .io-arrow::after{content:'↓';font-size:20px}
+ .io-note{font-size:13px}
+ .chip{font-size:12px}
+ .audio-legend{font:11px var(--sans)}
+ .seg{display:flex}
+ .seg button{flex:1;min-height:40px;padding:4px 6px;font-size:13px}
+ .model-input{font-size:13px;line-height:1.8}
+ .compare small,.summary-model{font-size:12px}
+ .factors{grid-template-columns:1fr 1fr}
+ .factors li{padding:10px}
+ .demo-nav{flex-wrap:wrap}
+ .demo-nav button{flex:1;min-height:44px;font-size:14px}
+ .demo-nav .demo-auto{order:1;flex-basis:100%}
+ .demo-note{font-size:12px}
+
+ /* experience */
+ .exp{grid-template-columns:minmax(0,1fr);gap:6px;padding:24px 0}
+ .exp-meta{display:flex;flex-wrap:wrap;gap:4px 14px}
+ .exp h3{font-size:18px}
+ .exp-photo,.exp-photo.wide{max-width:none;margin-top:14px}
+ .exp-photo:not(.wide) img{aspect-ratio:4/3;object-fit:cover;object-position:center 62%}
+
+ /* skills */
+ .skill-groups{grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:20px}
+ .skill-groups>div{padding:14px}
+ .skill-groups h3,.lang-use{font-size:12px}
+ .lang-tabs button{flex-direction:column;justify-content:center;text-align:center;gap:6px;min-height:72px;padding:10px 4px}
+ .lang-tabs strong{font-size:14px}
+ .lang-tabs small{display:none} /* repeated as the panel heading, and too long for a third of a phone */
+ .lang-panel{padding:14px;gap:16px}
+ .lang-info h3{font-size:19px}
+ .lang-what{margin-top:14px}
+ .lang-what b{font-size:13px}
+ .lang-what p{font-size:14px}
+ .code-bar{font-size:12px}
+ .code pre{overflow-x:visible;font-size:12px;line-height:1.7}
+ .code-line{white-space:pre-wrap;padding-left:30px;text-indent:-30px} /* wrap with a hanging indent, not a hidden sideways scroll */
+ .code-line>i{width:30px;padding-right:8px;text-indent:0}
+ .run-inputs label{font-size:12px}
+ .run-inputs input{min-height:44px}
+ .run-inputs.row input{flex-basis:100%}
+ .run-inputs button{flex:1 1 auto;min-height:44px;font-size:13px}
+ .console{padding:12px;font-size:13px}
+ .console-text,.run-note{font-size:13px}
+ .scores{gap:10px}
+ .scores div{grid-template-columns:minmax(0,1fr)}
+ .scores span{font-size:12px;overflow-wrap:normal}
+ .queue-viz{display:grid;grid-template-columns:1fr auto;overflow:visible}
+ .queue-viz ol{grid-row:2;grid-column:1/-1;flex-wrap:wrap}
+ .queue-viz li{white-space:normal}
+ .q-end{font-size:12px}
+
+ /* values */
+ .principles>div{grid-template-columns:28px minmax(0,1fr);gap:10px;padding:16px 0}
+
+ /* education: logo beside the name, description at full width */
+ .school-row{grid-template-columns:64px minmax(0,1fr);gap:4px 14px;align-items:center;padding:20px 0}
+ .school-logo{grid-row:span 2;width:64px;height:60px;padding:6px}
+ .school-detail{display:contents}
+ .school-detail h3{font-size:16px;line-height:1.5;margin:0;align-self:end}
+ .school-detail .school-period{font-size:12px;line-height:1.6;margin:0;align-self:start}
+ .school-detail p:not(.school-period){grid-column:1/-1;margin-top:8px}
+
+ /* timeline */
+ .filter-row button{min-height:40px;padding:5px 14px;font-size:13px}
+ .timeline li{grid-template-columns:60px 10px minmax(0,1fr);gap:8px;padding:12px 0}
+ .timeline time{font-size:12px}
+ .timeline small{font-size:12px}
+
+ /* github */
+ .repo-grid{grid-template-columns:minmax(0,1fr)}
+ .repo-grid>a{padding:16px}
+ .repo-grid p{font-size:14px}
+ .repo-grid small,.activity time{font-size:12px}
+
+ /* next / footer */
+ .contact-inner,.now-grid{grid-template-columns:minmax(0,1fr)}
+ .site-footer{gap:0 24px;padding-block:20px 28px}
+ .site-footer small{width:100%;order:1}
+ .footer-linkedin,.back-top{display:inline-flex;align-items:center;min-height:44px}
+ .footer-linkedin,.back-top{font-size:14px}
+ .now-grid article{padding:18px}
+
+ /* command palette: sits high, so the keyboard does not cover the results */
+ .command-dialog{margin-top:72px;max-height:calc(100dvh - 96px)}
+ .command-top{align-items:center;padding:8px 8px 8px 16px}
+ .command-top button{min-width:44px;min-height:44px;padding:0;font-size:0}
+ .command-top button::after{content:'×';font-size:20px}
+ .command-results a{align-items:center;min-height:48px}
+ .command-results a span{display:none}
+}
+@media(max-width:360px){
+ /* four step labels no longer fit side by side; the step title below names the current one */
+ .stepper strong{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+ .stepper{padding-bottom:10px}
+ .factors{grid-template-columns:minmax(0,1fr)}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}

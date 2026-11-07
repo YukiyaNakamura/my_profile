@@ -32,6 +32,8 @@ export function EngineeringLab({lang}:{lang:Lang}){
  useEffect(()=>{if(!auto)return;const id=setTimeout(()=>{if(step<3)setStep(step+1);else setAuto(false)},4200);return()=>clearTimeout(id)},[auto,step]);
  const go=(n:number)=>{setAuto(false);setStep(Math.max(0,Math.min(3,n)))};
  const tabKey=(e:React.KeyboardEvent)=>{const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;const n=(step+d+4)%4;go(n);document.getElementById('step-'+n)?.focus()};
+ // Back/Next sit below the step, so on a tall phone layout bring the stepper back into view
+ const goFromNav=(n:number)=>{go(n);const stepper=document.querySelector('.stepper');if(stepper&&stepper.getBoundingClientRect().top<0)stepper.scrollIntoView({block:'start'})};
  const hl=(i:number)=>({onMouseEnter:()=>setFocus(i),onMouseLeave:()=>setFocus(-1),onFocus:()=>setFocus(i),onBlur:()=>setFocus(-1),tabIndex:0,'data-hl':focus===i});
  const line=(u:typeof UTTERANCES[number],i:number,label=false)=><li key={i} className="utt" data-sp={u.sp} {...hl(i)}><b className="chip">{L('話者','Speaker')} {u.sp}</b>{label&&<b className="chip act">{u.act[ja?0:1]}</b>}<span>{u[lang]}</span></li>;
  const S=SUMMARY[lang];
@@ -53,8 +55,8 @@ export function EngineeringLab({lang}:{lang:Lang}){
    <div className="stage-head"><p className="stage-step">STEP {step+1} / 4</p><h3>{STEPS[step][lang]}<small>{STEPS[step].model}</small></h3><p>{ja?STEPS[step].dja:STEPS[step].den}</p></div>
    <div className="io"><div className="io-col">{io[step][0]}</div><div className="io-arrow" aria-hidden="true"><span>{STEPS[step].model}</span>→</div><div className="io-col out">{io[step][1]}</div></div>
   </div>
-  <div className="demo-nav"><button onClick={()=>go(step-1)} disabled={step===0}>← {L('前へ','Back')}</button><button className="demo-auto" onClick={()=>{if(auto)setAuto(false);else{setStep(0);setRun(r=>r+1);setAuto(true)}}} aria-pressed={auto}>{auto?L('■ 停止','■ Stop'):L('▶ 通しで見る','▶ Play all steps')}</button><button className="demo-next" onClick={()=>go(step+1)} disabled={step===3}>{L('次へ','Next')} →</button></div>
-  <p className="demo-note">{L('会話例と要約は説明用に作成したものです。学習済みモデルによる推論や、精度の実測は行っていません。発話にカーソルを合わせると、ステップ間で同じ発話が強調されます。','The dialogue and summaries are illustrative. This demo does not run trained models or report measured accuracy. Hover an utterance to highlight it.')}</p>
+  <div className="demo-nav"><button onClick={()=>goFromNav(step-1)} disabled={step===0}>← {L('前へ','Back')}</button><button className="demo-auto" onClick={()=>{if(auto)setAuto(false);else{setStep(0);setRun(r=>r+1);setAuto(true)}}} aria-pressed={auto}>{auto?L('■ 停止','■ Stop'):L('▶ 通しで見る','▶ Play all steps')}</button><button className="demo-next" onClick={()=>goFromNav(step+1)} disabled={step===3}>{L('次へ','Next')} →</button></div>
+  <p className="demo-note">{L('会話例と要約は説明用に作成したものです。学習済みモデルによる推論や、精度の実測は行っていません。発話にカーソルを合わせるかタップすると、同じ発話が強調されます。','The dialogue and summaries are illustrative. This demo does not run trained models or report measured accuracy. Hover or tap an utterance to highlight it.')}</p>
  </div>
  </Chapter>
 }
